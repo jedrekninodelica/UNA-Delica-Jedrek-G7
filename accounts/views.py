@@ -1,15 +1,27 @@
 from django.contrib import messages
 from django.contrib.auth import views as auth_views
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
 from .forms import CustomerUserCreationForm
 
 
-class SignUpView(CreateView):
+class SignUpView(SuccessMessageMixin, CreateView):
     form_class = CustomerUserCreationForm
     template_name = "registration/signup.html"
     success_url = reverse_lazy("login")
+    success_message = "Account created for %(username)s. You can now log in."
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("dashboard")
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Please fix the errors below.")
+        return super().form_invalid(form)
 
 
 class UnaLoginView(auth_views.LoginView):
@@ -29,3 +41,4 @@ class UnaLogoutView(auth_views.LogoutView):
         response = super().post(request, *args, **kwargs)
         messages.info(request, "You have been logged out.")
         return response
+
