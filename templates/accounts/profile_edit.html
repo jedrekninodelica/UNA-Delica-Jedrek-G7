@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Edit profile{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>Edit profile</h1>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% include "partials/nonfield_errors.html" %}
+    <div class="row-2">
+      {% include "partials/field.html" with field=form.first_name %}
+      {% include "partials/field.html" with field=form.last_name %}
+    </div>
+    {% include "partials/field.html" with field=form.email %}
+    {% include "partials/field.html" with field=form.course %}
+    {% include "partials/field.html" with field=form.contact_number %}
+    {% include "partials/field.html" with field=form.profile_photo %}
+    <p class="muted small">Your username ({{ user.username }}) and role ({{ user.get_role_display }}) can't be changed here.</p>
+    <div class="actions">
+      <button type="submit" class="btn">Save changes</button>
+      <a href="{% url 'profile' %}" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

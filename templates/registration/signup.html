@@ -1,12 +1,39 @@
 {% extends "base.html" %}
-
-{% block title %}Campus Connect - Sign Up{% endblock %}
-{% block footer %}Copyright CIT-U 2026{% endblock %}
+{% block title %}Sign up{% endblock %}
 {% block content %}
-<h2>Create your account</h2>
-<form method="post">
+<div class="card narrow">
+  <h1>Create your account</h1>
+  <p class="muted">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+  <form method="post" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-</form>
+    {% include "partials/nonfield_errors.html" %}
+    <div class="row-2">
+      {% include "partials/field.html" with field=form.first_name %}
+      {% include "partials/field.html" with field=form.last_name %}
+    </div>
+    {% include "partials/field.html" with field=form.username %}
+    {% include "partials/field.html" with field=form.email %}
+
+    <div class="field{% if form.role.errors %} has-error{% endif %}">
+      <span class="label">{{ form.role.label }} <span class="req">*</span></span>
+      <div class="role-choices">
+        {% for radio in form.role %}
+          <label class="role-choice">
+            {{ radio.tag }}
+            <span class="role-choice-body">
+              <strong>{{ radio.choice_label }}</strong>
+              <small>{% if radio.data.value == "STUDENT" %}Track tasks and use Focus One{% else %}Manage sections and post deadlines{% endif %}</small>
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+      {% for error in form.role.errors %}<p class="error">{{ error }}</p>{% endfor %}
+    </div>
+
+    {% include "partials/field.html" with field=form.course show_help=True %}
+    {% include "partials/field.html" with field=form.password1 show_help=True %}
+    {% include "partials/field.html" with field=form.password2 %}
+    <button type="submit" class="btn btn-block">Sign up</button>
+  </form>
+</div>
 {% endblock %}

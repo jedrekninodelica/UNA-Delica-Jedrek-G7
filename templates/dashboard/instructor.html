@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Instructor dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">Instructor dashboard</p>
+    <h1>Hi, {{ user.first_name }}.</h1>
+    <p class="muted">Manage your sections and deadlines from here.</p>
+  </div>
+</div>
+
+<section class="grid-3">
+  <div class="card stat"><span class="stat-num">0</span><span class="stat-label">Active sections</span></div>
+  <div class="card stat"><span class="stat-num">{{ student_count }}</span><span class="stat-label">Registered students</span></div>
+  <div class="card stat"><span class="stat-num">0</span><span class="stat-label">Upcoming deadlines</span></div>
+</section>
+
+<section class="grid-2">
+  <div class="card">
+    <h3>My sections</h3>
+    <p class="muted">Create a section to get a join code for your students.</p>
+    <span class="badge-soon">Coming in the next phase</span>
+  </div>
+  <div class="card">
+    <h3>Deadline overview</h3>
+    <p class="muted">See which weeks have crowded deadlines across your sections.</p>
+    <span class="badge-soon">Coming soon</span>
+  </div>
+  <div class="card">
+    <h3>My account</h3>
+    <p class="muted">Update your name, contact number, or photo.</p>
+    <a href="{% url 'profile' %}" class="btn btn-ghost btn-sm">View profile</a>
+  </div>
+</section>
+{% endblock %}

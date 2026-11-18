@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Student dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">Student dashboard</p>
+    <h1>Hi, {{ user.first_name }}.</h1>
+    <p class="muted">Here's where your Focus One task and progress will show up.</p>
+  </div>
+</div>
+
+<section class="focus-card">
+  <p class="eyebrow">Focus One</p>
+  <h2>No tasks yet</h2>
+  <p>Once you join a section and add tasks, UNA will show the single task you should start now.</p>
+  <span class="badge-soon">Coming in the next phase</span>
+</section>
+
+<section class="grid-3">
+  <div class="card stat"><span class="stat-num">0</span><span class="stat-label">Sections joined</span></div>
+  <div class="card stat"><span class="stat-num">0</span><span class="stat-label">Pending tasks</span></div>
+  <div class="card stat"><span class="stat-num">0</span><span class="stat-label">Completed this week</span></div>
+</section>
+
+<section class="grid-2">
+  <div class="card">
+    <h3>Join a section</h3>
+    <p class="muted">Enter the join code from your instructor to see their deadlines.</p>
+    <span class="badge-soon">Coming soon</span>
+  </div>
+  <div class="card">
+    <h3>My account</h3>
+    <p class="muted">Update your name, contact number, or photo.</p>
+    <a href="{% url 'profile' %}" class="btn btn-ghost btn-sm">View profile</a>
+  </div>
+</section>
+{% endblock %}

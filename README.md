@@ -7,6 +7,14 @@ UNA ranks the tasks and shows the single task to start now on a "Focus One" scre
 Built with full-stack Django (Django templates) and PostgreSQL hosted on Supabase.
 This project started from the CampusConnect class activity and was extended for UNA.
 
+## Project Development 1: Account Feature
+
+- **Sign up** with required fields, a valid and unique email, a unique username, and a matching password confirmation. Passwords are hashed by Django.
+- **Log in and log out.** Wrong credentials show an error. Logging out ends the session.
+- **Protected pages** use `LoginRequiredMixin`. Logged-out users are sent to the login page.
+- **Two roles: Student and Instructor.** After login, each user goes to their own dashboard. Opening the other role's dashboard shows an "Access denied" page (403).
+- **Profile.** Users view and edit their own name, email, course/program, contact number, and profile photo, and can change their password. The profile URLs have no user ID, so users can only reach their own profile.
+
 ## Setup
 
 1. Create and activate a virtual environment:
@@ -34,3 +42,22 @@ This project started from the CampusConnect class activity and was extended for 
    python manage.py runserver
    ```
 
+## Tests
+
+```bash
+python manage.py test
+```
+
+## Main URLs
+
+| URL | Page |
+|---|---|
+| `/accounts/signup/` | Sign up |
+| `/accounts/login/` | Log in |
+| `/` | Sends you to your role's dashboard |
+| `/student/` | Student dashboard (students only) |
+| `/instructor/` | Instructor dashboard (instructors only) |
+| `/accounts/profile/` | View your profile |
+| `/accounts/profile/edit/` | Edit your profile |
+| `/accounts/password/change/` | Change your password |
+| `/admin/` | Django admin (superusers only) |

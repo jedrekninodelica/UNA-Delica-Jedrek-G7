@@ -1,22 +1,51 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>CampusConnect</title>
-    </head>
-    <body>
-        <nav>
-            {% if user.is_authenticated %}
-            Hi, {{ user.username }}!
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Log out</button>
-            </form>
-            {% else %}
-            <a href="{% url 'login' %}">Log in</a>
-            <a href="{% url 'signup' %}">Sign up</a>
-            {% endif %}
-        </nav>
-        <main>{% block content %}{% endblock %}</main>
-        <footer>{% block footer%}{% endblock %}</footer>
-    </body>
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}UNA{% endblock %} · UNA</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark">U</span> UNA</a>
+      <nav class="nav">
+        {% if user.is_authenticated %}
+          {% if user.is_instructor %}
+            <a href="{% url 'instructor_dashboard' %}" class="{% if request.resolver_match.url_name == 'instructor_dashboard' %}active{% endif %}">Dashboard</a>
+            <span class="nav-soon" title="Coming in a later phase">Sections</span>
+            <span class="nav-soon" title="Coming in a later phase">Deadlines</span>
+          {% else %}
+            <a href="{% url 'student_dashboard' %}" class="{% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">Dashboard</a>
+            <span class="nav-soon" title="Coming in a later phase">Focus One</span>
+            <span class="nav-soon" title="Coming in a later phase">Tasks</span>
+          {% endif %}
+          <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name in 'profile profile_edit password_change' %}active{% endif %}">Profile</a>
+          <span class="role-pill role-{{ user.role|lower }}">{{ user.get_role_display }}</span>
+          <form method="post" action="{% url 'logout' %}" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost btn-sm">Log out</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Log in</a>
+          <a href="{% url 'signup' %}" class="btn btn-sm">Sign up</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="msg msg-{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">{% block footer %}UNA · Copyright CIT-U 2026{% endblock %}</footer>
+</body>
 </html>
