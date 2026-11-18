@@ -21,6 +21,7 @@
             <span class="nav-soon" title="Coming in a later phase">Focus One</span>
             <span class="nav-soon" title="Coming in a later phase">Tasks</span>
           {% endif %}
+          <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name in 'profile profile_edit password_change' %}active{% endif %}">Profile</a>
           <span class="role-pill role-{{ user.role|lower }}">{{ user.get_role_display }}</span>
           <form method="post" action="{% url 'logout' %}" class="inline">
             {% csrf_token %}

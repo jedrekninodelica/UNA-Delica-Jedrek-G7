@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView, UpdateView
 
-from .forms import CustomerUserCreationForm
+from .forms import CustomerUserCreationForm, ProfileForm
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
@@ -42,3 +43,28 @@ class UnaLogoutView(auth_views.LogoutView):
         messages.info(request, "You have been logged out.")
         return response
 
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    """Shows the logged-in user's own profile. There is no user id in the URL."""
+
+    template_name = "accounts/profile.html"
+
+
+class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    form_class = ProfileForm
+    template_name = "accounts/profile_edit.html"
+    success_url = reverse_lazy("profile")
+    success_message = "Your profile was updated."
+
+    def get_object(self, queryset=None):
+        # Always edit the logged-in user, never someone else.
+        return self.request.user
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Please fix the errors below.")
+        return super().form_invalid(form)
+
+
+class UnaPasswordChangeView(SuccessMessageMixin, auth_views.PasswordChangeView):
+    success_url = reverse_lazy("profile")
+    success_message = "Your password was changed."

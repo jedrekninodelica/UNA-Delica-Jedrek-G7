@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}My profile{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <div class="profile-head">
+    {% if user.profile_photo %}
+      <img class="avatar" src="{{ user.profile_photo.url }}" alt="Profile photo">
+    {% else %}
+      <div class="avatar avatar-initials">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</div>
+    {% endif %}
+    <div>
+      <h1>{{ user.get_full_name|default:user.username }}</h1>
+      <span class="role-pill role-{{ user.role|lower }}">{{ user.get_role_display }}</span>
+    </div>
+  </div>
+  <dl class="details">
+    <dt>Username</dt><dd>{{ user.username }}</dd>
+    <dt>Email</dt><dd>{{ user.email }}</dd>
+    <dt>Course / program</dt><dd>{{ user.course|default:"Not set" }}</dd>
+    <dt>Contact number</dt><dd>{{ user.contact_number|default:"Not set" }}</dd>
+    <dt>Member since</dt><dd>{{ user.date_joined|date:"F j, Y" }}</dd>
+    <dt>Last login</dt><dd>{{ user.last_login|date:"F j, Y g:i A"|default:"—" }}</dd>
+  </dl>
+  <div class="actions">
+    <a href="{% url 'profile_edit' %}" class="btn">Edit profile</a>
+    <a href="{% url 'password_change' %}" class="btn btn-ghost">Change password</a>
+  </div>
+</div>
+{% endblock %}
